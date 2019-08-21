@@ -2,7 +2,7 @@
 const bucketSort = (arr, radix = 10) => {
     arr = [...arr]
     let K = Math.ceil(Math.log10(Math.max(...arr)))
-    let bucket = Array(10).fill([]).map(_ => [])
+    let bucket = Array(10).fill(0).map(_ => [])
     for (let i = 0; i < K; i++) {
         arr.forEach((value) => {
             bucket[parseInt((value) / (radix ** i)) % radix].push(value)
