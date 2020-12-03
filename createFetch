@@ -1,0 +1,31 @@
+  const createFetch = (size = 5) => {
+  const MAX_SIZE = size;
+  const pending = [];
+  const excuting = [];
+
+  const _fetch = () => {
+    const remain = MAX_SIZE - excuting.length;
+    if (remain === 0) return;
+    const queue = [];
+    for (let i = 0; i < remain; i++) {
+      queue.push(pending.unshift());
+    }
+    queue.map(({ obj, _resolve, _reject }) => {
+      fetch(obj)
+        .then((d) => _resolve(d))
+        .catch((err) => _reject(err))
+        .finally(_fetch);
+    });
+  };
+
+  return (obj) => {
+    let _resolve;
+    let _reject;
+    pending.push({ obj, _resolve, _reject });
+    _fetch();
+    return new Promise((resolve, reject) => {
+      _resolve = resolve;
+      _reject = reject;
+    });
+  };
+};
